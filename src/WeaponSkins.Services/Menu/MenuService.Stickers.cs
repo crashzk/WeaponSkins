@@ -112,11 +112,24 @@ public partial class MenuService
         var main = Core.MenusAPI.CreateBuilder();
         main.Design.SetMenuTitle(LocalizationService[player].MenuTitleStickers);
 
+        WeaponSkinData? liveData = null;
+        if (_stickerOperatingWeaponSkins.TryGetValue(player.SteamID, out var operatingData))
+        {
+            Api.TryGetWeaponSkin(player.SteamID, player.Controller.Team, operatingData.DefinitionIndex, out liveData);
+        }
+
         for (int i = 0; i < 6; i++)
         {
-            var title =
-                $"[{i + 1}] Slot";
             var slot = i;
+
+            var equippedName = liveData != null
+                ? GetStickerName(liveData.GetSticker(slot), player.PlayerLanguage.Value)
+                : null;
+
+            var title = equippedName != null
+                ? $"[{i + 1}] Slot ({(equippedName.Length > 24 ? equippedName.Substring(0, 21) + "..." : equippedName)})"
+                : $"[{i + 1}] Slot";
+
             main.AddOption(new SubmenuMenuOption(title,
                 () => Task.FromResult(BuildStickerMenuBySlot(player, slot, player.PlayerLanguage.Value, title))));
         }
@@ -133,7 +146,7 @@ public partial class MenuService
             return CreateDisabledOption(LocalizationService[player].MenuTitleStickers);
         }
 
-        if (!TryGetWeaponDataInHand(player, out var dataInHand))
+        if (!TryGetOrCreateWeaponDataInHand(player, out var dataInHand))
         {
             return CreateDisabledOption(LocalizationService[player].MenuTitleStickers);
         }

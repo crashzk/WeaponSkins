@@ -13,4 +13,7 @@ public class MainConfigModel
     public List<string> ItemLanguages { get; set; } = [];
 
     public ItemPermissionConfig ItemPermissions { get; set; } = new();
+
+    // EXPERIMENTAL. See AgentFixConfig / AgentLoadoutFixService.
+    public AgentFixConfig AgentFix { get; set; } = new();
 }

@@ -14,6 +14,9 @@ public partial class MenuService
         var main = Core.MenusAPI.CreateBuilder();
         main.Design.SetMenuTitle(LocalizationService[player].MenuTitleGloveProperties);
 
+        var canUseWear = ItemPermissionService.CanUseWear(player.SteamID);
+        var canUseSeed = ItemPermissionService.CanUseSeed(player.SteamID);
+
         var wearOption = new InputMenuOption(
             LocalizationService[player].MenuSkinPropertiesWear,
             validator: (value) =>
@@ -37,6 +40,7 @@ public partial class MenuService
             }, true);
         };
 
+        wearOption.Enabled = canUseWear;
         main.AddOption(wearOption);
 
         var seedOption = new InputMenuOption(
@@ -65,6 +69,7 @@ public partial class MenuService
             }, true);
         };
 
+        seedOption.Enabled = canUseSeed;
         main.AddOption(seedOption);
 
         return main.Build();

@@ -62,8 +62,18 @@ GloveSkins = "vip"
 Stickers = "vip"
 Keychains = "vip"
 Agents = "vip"
+MusicKits = "vip"
+
+# Optional: gate individual options inside the "Properties" menus instead of (or on top of)
+# gating the whole feature above. Leave empty to keep them available to everyone.
+Wear = "vip"      # Wear input, shown in the Weapon/Knife/Glove Properties menus
+Seed = "vip"      # Seed input, shown in the Weapon/Knife/Glove Properties menus
+Nametag = "vip"   # NameTag set/unset, shown in the Weapon/Knife Properties menus
+Stattrak = "vip"  # StatTrak set/unset/count, shown in the Weapon/Knife Properties menus
 ```
 Leave a value empty or remove it to keep the feature available to everyone. Players without the required permission cannot open the related menus, and any equipped cosmetics of that type are hidden until they regain access.
+
+`Wear`, `Seed`, `Nametag` and `Stattrak` are finer-grained than the feature-level permissions above: they don't hide the whole Properties menu, they only disable that specific option for players without the permission (it stays visible, greyed out).
 
 ## Showcase
 [Youtube](https://youtu.be/MRa8JIRLysE)

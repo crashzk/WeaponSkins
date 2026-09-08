@@ -14,6 +14,11 @@ public partial class MenuService
         var main = Core.MenusAPI.CreateBuilder();
         main.Design.SetMenuTitle(LocalizationService[player].MenuTitleSkinProperties);
 
+        var canUseWear = ItemPermissionService.CanUseWear(player.SteamID);
+        var canUseSeed = ItemPermissionService.CanUseSeed(player.SteamID);
+        var canUseNametag = ItemPermissionService.CanUseNametag(player.SteamID);
+        var canUseStattrak = ItemPermissionService.CanUseStattrak(player.SteamID);
+
         var wearOption = new InputMenuOption(
             LocalizationService[player].MenuSkinPropertiesWear,
             validator: (value) =>
@@ -39,6 +44,7 @@ public partial class MenuService
             }, true);
         };
 
+        wearOption.Enabled = canUseWear;
         main.AddOption(wearOption);
 
         var seedOption = new InputMenuOption(
@@ -64,6 +70,7 @@ public partial class MenuService
             }, true);
         };
 
+        seedOption.Enabled = canUseSeed;
         main.AddOption(seedOption);
 
 
@@ -83,6 +90,7 @@ public partial class MenuService
             }, true);
         };
 
+        nametagOption.Enabled = canUseNametag;
         main.AddOption(nametagOption);
 
         var unsetNametagOption = new ButtonMenuOption(LocalizationService[player].MenuSkinPropertiesNametagUnset);
@@ -96,6 +104,7 @@ public partial class MenuService
             return ValueTask.CompletedTask;
         };
 
+        unsetNametagOption.Enabled = canUseNametag;
         main.AddOption(unsetNametagOption);
 
         var setStattrakOption = new ButtonMenuOption(LocalizationService[player].MenuSkinPropertiesSetStattrak);
@@ -109,6 +118,7 @@ public partial class MenuService
             return ValueTask.CompletedTask;
         };
 
+        setStattrakOption.Enabled = canUseStattrak;
         main.AddOption(setStattrakOption);
 
         var unsetStattrakOption = new ButtonMenuOption(LocalizationService[player].MenuSkinPropertiesUnsetStattrak);
@@ -122,6 +132,7 @@ public partial class MenuService
             return ValueTask.CompletedTask;
         };
 
+        unsetStattrakOption.Enabled = canUseStattrak;
         main.AddOption(unsetStattrakOption);
 
         var setSouvenirOption = new ButtonMenuOption(LocalizationService[player].MenuSkinPropertiesSetSouvenir);
@@ -171,6 +182,7 @@ public partial class MenuService
                 skin.StattrakCount = weaponInHand.StattrakCount;
             }, true);
         };
+        setStattrakCountOption.Enabled = canUseStattrak;
         main.AddOption(setStattrakCountOption);
 
         for (int i = 0; i < 6; i++)

@@ -115,6 +115,36 @@ public partial class MenuService
         return true;
     }
 
+    // Like TryGetWeaponDataInHand, but succeeds even when the player has never customized
+    // this weapon/team through the plugin (still using their default Steam inventory skin).
+    // In that case a fresh, unsaved WeaponSkinData is synthesized for the weapon actually in
+    // hand - Api.UpdateWeaponSkin already creates the real record on first write (it does the
+    // same get-or-create internally), so this only needs to unblock read/menu access, not
+    // touch storage. Used by menus (Stickers, Keychains) that should be usable on any weapon
+    // the player is holding, not just ones with an existing custom skin.
+    public bool TryGetOrCreateWeaponDataInHand(IPlayer player,
+        [MaybeNullWhen(false)] out WeaponSkinData dataInHand)
+    {
+        dataInHand = null;
+        if (!TryGetWeaponInHand(player, out var weaponInHand))
+        {
+            return false;
+        }
+
+        var defIndex = weaponInHand.AttributeManager.Item.ItemDefinitionIndex;
+        if (!Api.TryGetWeaponSkin(player.SteamID, player.Controller.Team, defIndex, out dataInHand))
+        {
+            dataInHand = new WeaponSkinData
+            {
+                SteamID = player.SteamID,
+                Team = player.Controller.Team,
+                DefinitionIndex = defIndex
+            };
+        }
+
+        return true;
+    }
+
     public bool TryGetKnifeDataInHand(IPlayer player,
         [MaybeNullWhen(false)] out KnifeSkinData dataInHand)
     {

@@ -41,7 +41,11 @@ public class ItemPermissionService
             Stickers = source.Stickers,
             Keychains = source.Keychains,
             Agents = source.Agents,
-            MusicKits = source.MusicKits
+            MusicKits = source.MusicKits,
+            Wear = source.Wear,
+            Seed = source.Seed,
+            Nametag = source.Nametag,
+            Stattrak = source.Stattrak
         };
     }
 
@@ -183,6 +187,14 @@ public class ItemPermissionService
     public bool CanUseAgents(ulong steamId) => HasPermission(steamId, Config.Agents);
 
     public bool CanUseMusicKits(ulong steamId) => HasPermission(steamId, Config.MusicKits);
+
+    public bool CanUseWear(ulong steamId) => HasPermission(steamId, Config.Wear);
+
+    public bool CanUseSeed(ulong steamId) => HasPermission(steamId, Config.Seed);
+
+    public bool CanUseNametag(ulong steamId) => HasPermission(steamId, Config.Nametag);
+
+    public bool CanUseStattrak(ulong steamId) => HasPermission(steamId, Config.Stattrak);
 
     private bool HasPermission(ulong steamId,
         string permission)

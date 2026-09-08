@@ -303,7 +303,7 @@ public class EconService
         if (!LanguageCodeToTranslationKey.TryGetValue(key, out string? translationKey))
         {
             Logger.LogWarning($"Language code {key} not found in LanguageCodeToTranslationKey, using primary language {_PrimaryLanguage}...");
-            return localizedNames[_PrimaryLanguage];
+            translationKey = _PrimaryLanguage;
         }
         if (localizedNames.TryGetValue(translationKey, out string? value))
         {
@@ -314,7 +314,22 @@ public class EconService
         {
             return value2;
         }
-        return localizedNames["english"];
+        if (localizedNames.TryGetValue("english", out string? value3))
+        {
+            return value3;
+        }
+        // Some schema entries (e.g. placeholder/"no kit" music kit definitions) have no
+        // loc_name/name token at all, so localizedNames can legitimately be empty here.
+        // Don't throw for that - fall back to whatever single value we do have, or an
+        // empty string as a last resort, instead of crashing every caller that iterates
+        // over a full item list (e.g. the Music Kit menu).
+        if (localizedNames.Count > 0)
+        {
+            return localizedNames.Values.First();
+        }
+
+        Logger.LogWarning("GetLocalizedName called with an empty localizedNames dictionary; returning an empty string.");
+        return string.Empty;
     }
 
     private Dictionary<string, string> GetLocalizedNames(string key)

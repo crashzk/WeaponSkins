@@ -12,7 +12,7 @@
 </p>
 
 ## Features
-- MySQL & sqlite database support
+- MySQL & SQLite database support
 - Fully functioning in-game skin menu
 - Compatible with CounterStrikeSharp WeaponPaints database
 - Long-term stattrak tracking
@@ -20,7 +20,7 @@
 - Completely game-based econ data dumping (no network required)
 
 ## Main Configuration
-The `config.toml` should have the following structure in `Main` section:
+The `config.toml` should have the following structure in **`Main`** section:
 ```toml
 [Main]
 StorageBackend = "inherit"
@@ -29,15 +29,15 @@ SyncFromDatabaseWhenPlayerJoin = false
 ItemLanguages = []
 ```
 
-#### `StorageBackend`
-When set to `inherit`, the plugin use the database configuration from swiftlys2 database configuration.
+### `StorageBackend`
+When set to **`inherit`**, the plugin use the database configuration from swiftlys2 database configuration.
 
-When set to `sqlite`, the plugin use its own file-based sqlite database.
+When set to **`sqlite`**, the plugin use its own file-based sqlite database.
 
-#### `InventoryUpdateBackend`
-Recommended to set to `hook` for now. Another option is `inventory` but its deprecated.
+### `InventoryUpdateBackend`
+Recommended to set to **`hook`** for now. Another option is **`inventory`** but its deprecated.
 
-#### `SyncFromDatabaseWhenPlayerJoin`
+### `SyncFromDatabaseWhenPlayerJoin`
 When set to true, the plugin will automatically synchronize skin data from database when a player join.
 
 The update is asynchronous so it won't introduce lags in theory.
@@ -53,38 +53,31 @@ Check the `Code` column in this table for all available languages:
 [Available language codes](https://swiftlys2.net/docs/development/translations/#language-codes)
 
 ## Item Permissions
-Gate entire feature groups with a single permission string in `config.toml`:
+Gate entire feature groups with a single permission string in **`config.toml`**:
 ```toml
 [Main.ItemPermissions]
-WeaponSkins = "vip"
-KnifeSkins = "vip"
-GloveSkins = "vip"
-Stickers = "vip"
+WeaponSkins = ""
+KnifeSkins = ""
+GloveSkins = ""
+Stickers = ""
 Keychains = "vip"
 Agents = "vip"
 MusicKits = "vip"
-
-# Optional: gate individual options inside the "Properties" menus instead of (or on top of)
-# gating the whole feature above. Leave empty to keep them available to everyone.
-Wear = "vip"      # Wear input, shown in the Weapon/Knife/Glove Properties menus
-Seed = "vip"      # Seed input, shown in the Weapon/Knife/Glove Properties menus
-Nametag = "vip"   # NameTag set/unset, shown in the Weapon/Knife Properties menus
-Stattrak = "vip"  # StatTrak set/unset/count, shown in the Weapon/Knife Properties menus
+Wear = "vip"
+Seed = "vip"
+Nametag = "vip"
+Stattrak = "vip"
 ```
 Leave a value empty or remove it to keep the feature available to everyone. Players without the required permission cannot open the related menus, and any equipped cosmetics of that type are hidden until they regain access.
-
-`Wear`, `Seed`, `Nametag` and `Stattrak` are finer-grained than the feature-level permissions above: they don't hide the whole Properties menu, they only disable that specific option for players without the permission (it stays visible, greyed out).
 
 ## Showcase
 [Youtube](https://youtu.be/MRa8JIRLysE)
   
 ## Building
-
 - Open the project in your preferred .NET IDE (e.g., Visual Studio, Rider, VS Code).
-- Build the project. The output DLL and resources will be placed in the `build/` directory.
+- Build the project. The output DLL and resources will be placed in the **`build/`** directory.
 - The publish process will also create a zip file for easy distribution.
 
 ## Publishing
-
-- Use the `dotnet publish -c Release` command to build and package your plugin.
-- Distribute the generated zip file or the contents of the `build/publish` directory.
+- Use the **`dotnet publish -c Release`** command to build and package your plugin.
+- Distribute the generated zip file or the contents of the **`build/publish`** directory.

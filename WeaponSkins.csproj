@@ -10,7 +10,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AssemblyName>WeaponSkins</AssemblyName>
     <OutputPath>$(MSBuildThisFileDirectory)build/</OutputPath>
-    <PublishDir>D:/cs2server/game/csgo/addons/swiftlys2/plugins/WeaponSkins</PublishDir>
+    <PublishDir>C:/cs2server/servers/1/serverfiles/game/csgo/addons/swiftlys2/plugins/WeaponSkins</PublishDir>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,7 +32,7 @@
     <PackageReference Include="Tomlyn.Extensions.Configuration" Version="1.0.6" />
     <PackageReference Include="ValveKeyValue" Version="0.20.0.417" />
     <PackageReference Include="SwiftlyS2.CS2" Version="1.4.2" ExcludeAssets="runtime" PrivateAssets="all" />
-    <ProjectReference Include="WeaponSkins.Shared\WeaponSkins.Shared.csproj" />
+    <ProjectReference Include="WeaponSkins.Shared/WeaponSkins.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,8 +42,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="examples\**\*.cs" />
-    <Compile Remove="WeaponSkins.Shared\**\*.cs" />
+    <Compile Remove="examples/**/*.cs" />
+    <Compile Remove="WeaponSkins.Shared/**/*.cs" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(WorkflowVersion)' != ''">
@@ -52,7 +52,7 @@
 
   <Target Name="CreateZip" AfterTargets="Publish">
     <ItemGroup>
-      <PublishFiles Include="$(PublishDir)**\*.*" />
+      <PublishFiles Include="$(PublishDir)**/*.*" />
     </ItemGroup>
     
     <ZipDirectory SourceDirectory="$(PublishDir)../" DestinationFile="$(OutputPath)../$(AssemblyName).zip" Overwrite="true" />

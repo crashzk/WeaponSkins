@@ -81,6 +81,7 @@ public static class StickerFixService
         hash.Add(skin.Sticker3?.GetHashCode());
         hash.Add(skin.Sticker4?.GetHashCode());
         hash.Add(skin.Sticker5?.GetHashCode());
+        hash.Add(skin.Keychain0?.GetHashCode());
 
         return hash.ToHashCode();
     }

@@ -80,7 +80,14 @@ public class StorageService
 
     private void OnClientPutInServer(IOnClientPutInServerEvent @event)
     {
-        DatabaseSynchronizeService.Synchronize();
+        var player = Core.PlayerManager.GetPlayer(@event.PlayerId);
+        if (player == null || player.SteamID == 0)
+        {
+            DatabaseSynchronizeService.Synchronize();
+            return;
+        }
+
+        _ = DatabaseSynchronizeService.ReloadPlayerAsync(Provider, player.SteamID);
     }
 
     public void Set(IStorageProvider provider)

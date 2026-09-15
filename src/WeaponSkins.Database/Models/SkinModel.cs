@@ -1,3 +1,4 @@
+using System.Globalization;
 
 using FreeSql.DataAnnotations;
 
@@ -44,45 +45,69 @@ public record SkinModel
 
     [Column(Name = "weapon_keychain")] public string Keychain { get; set; } = "0;0;0;0;0";
 
-    private static StickerData ToStickerModel(string sticker)
+    private static StickerData? ToStickerModel(string sticker)
     {
+        if (string.IsNullOrWhiteSpace(sticker)) return null;
         var parts = sticker.Split(';');
+        if (parts.Length < 7) return null;
+        var id = int.Parse(parts[0], CultureInfo.InvariantCulture);
+        if (id == 0) return null;
         return new StickerData
         {
-            Id = int.Parse(parts[0]),
-            Schema = int.Parse(parts[1]),
-            OffsetX = float.Parse(parts[2]),
-            OffsetY = float.Parse(parts[3]),
-            Wear = float.Parse(parts[4]),
-            Scale = float.Parse(parts[5]),
-            Rotation = float.Parse(parts[6]),
+            Id = id,
+            Schema = int.Parse(parts[1], CultureInfo.InvariantCulture),
+            OffsetX = ParseFloat(parts[2]),
+            OffsetY = ParseFloat(parts[3]),
+            Wear = ParseFloat(parts[4]),
+            Scale = ParseFloat(parts[5]),
+            Rotation = ParseFloat(parts[6]),
         };
     }
 
     private static string FromStickerModel(StickerData? sticker)
     {
-        if (sticker == null) return "0;0;0;0;0;0;0";
-        return
-            $"{sticker.Id};{sticker.Schema};{sticker.OffsetX};{sticker.OffsetY};{sticker.Wear};{sticker.Scale};{sticker.Rotation}";
+        if (sticker == null || sticker.Id == 0) return "0;0;0;0;0;0;0";
+        return string.Create(CultureInfo.InvariantCulture,
+            $"{sticker.Id};{sticker.Schema};{sticker.OffsetX};{sticker.OffsetY};{sticker.Wear};{sticker.Scale};{sticker.Rotation}");
     }
 
-    private static KeychainData ToKeychainModel(string keychain)
+    private static KeychainData? ToKeychainModel(string keychain)
     {
+        if (string.IsNullOrWhiteSpace(keychain)) return null;
         var parts = keychain.Split(';');
+        if (parts.Length < 5) return null;
+        var id = int.Parse(parts[0], CultureInfo.InvariantCulture);
+        if (id == 0) return null;
         return new KeychainData
         {
-            Id = int.Parse(parts[0]),
-            OffsetX = float.Parse(parts[1]),
-            OffsetY = float.Parse(parts[2]),
-            OffsetZ = float.Parse(parts[3]),
-            Seed = int.Parse(parts[4]),
+            Id = id,
+            OffsetX = ParseFloat(parts[1]),
+            OffsetY = ParseFloat(parts[2]),
+            OffsetZ = ParseFloat(parts[3]),
+            Seed = int.Parse(parts[4], CultureInfo.InvariantCulture),
         };
     }
 
     private static string FromKeychainModel(KeychainData? keychain)
     {
-        if (keychain == null) return "0;0;0;0;0";
-        return $"{keychain.Id};{keychain.OffsetX};{keychain.OffsetY};{keychain.OffsetZ};{keychain.Seed}";
+        if (keychain == null || keychain.Id == 0) return "0;0;0;0;0";
+        return string.Create(CultureInfo.InvariantCulture,
+            $"{keychain.Id};{keychain.OffsetX};{keychain.OffsetY};{keychain.OffsetZ};{keychain.Seed}");
+    }
+
+    private static float ParseFloat(string value)
+    {
+        if (float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var invariant))
+        {
+            return invariant;
+        }
+
+        if (float.TryParse(value, NumberStyles.Float, CultureInfo.CurrentCulture, out var current))
+        {
+            return current;
+        }
+
+        return 0f;
     }
 
     public WeaponSkinData ToDataModel()
